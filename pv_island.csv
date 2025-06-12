@@ -1,0 +1,16 @@
+Index,Isola,Favignana,Levanzo,Marettimo,Lampedusa,Linosa,Alicudi,Filicudi,Panarea,Stromboli,Tremiti
+Comune_name,-,Favignana,Favignana,Favignana,Lampedusa e Linosa,Lampedusa e Linosa,Lipari,Lipari,Lipari,Lipari,Tremiti
+building_extension_comune,km2,0.38,0.38,0.38,0.61,0.61,1.33,1.33,1.33,1.33,0.06
+Surface_comune,km2,38.31,38.31,38.31,25.22,25.22,89.71,89.71,89.71,89.71,3.18
+Surface_island,km2,19.8,5.6,12.3,20.2,5.43,5.1,9.49,3.34,12.19,3.18
+building_extension_island,km2,0.1964,0.0555,0.122,0.4886,0.1313,0.0756,0.1407,0.0495,0.1807,0.06
+prc_max_occupation,[-],0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02
+surface_PV_available,m2,3928,1111,2440,9772,2627,1512,2814,990,3614,1200
+PV_power_installed_comune-total,kWp,332.48,332.48,332.48,181.12,181.12,434,434,434,434,18.4
+PV_power_installed_comune-roof,kWp,203.48,203.48,203.48,33.62,33.62,84.89,84.89,84.89,84.89,18.4
+PV_power_installed_comune-ground,kWp,129,129,129,147.5,147.5,349.11,349.11,349.11,349.11,0
+PV_power_installed_isola_roof,kWp,105.17,29.74,65.33,26.93,7.24,4.83,8.98,3.16,11.54,18.4
+PV_power_installed_isola_ground,kWp,66.67,18.86,41.42,118.14,31.76,19.85,36.93,13,47.44,0
+Surface_factor_PV,m2/kWp,5,5,5,5,5,5,5,5,5,5
+Surface_occupied_isola,m2,333.36,94.28,207.09,590.7,158.79,99.23,184.65,64.99,237.19,0
+Surface_remaining,m2,3594.6,1016.65,2233.01,9180.91,2467.94,1412.97,2629.24,925.36,3377.28,1200

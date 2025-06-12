@@ -1,0 +1,23 @@
+locations:
+    # X1-start
+    X1:
+        techs:
+            supply_ship:
+            desalter_existing:
+            desalter_planned:
+            thermo:
+            pv_existing_roof:
+            pv_existing_ground:
+            pv_planned_roof:
+            battery:
+            water_storage_existing:
+            water_storage_planned:
+
+            demand_electricity:
+                constraints.resource: file=hourly_energy_demand.csv
+            demand_water:
+                constraints.resource: file=hourly_water_demand.csv
+
+        #available_area: 14000
+        coordinates: {x: 2, y: 6}
+    # X1-end

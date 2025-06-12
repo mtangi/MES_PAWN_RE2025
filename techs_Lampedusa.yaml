@@ -1,0 +1,242 @@
+##
+# TECHNOLOGY DEFINITIONS
+##
+
+techs:
+
+## - SUPPLY FROM BOAT - ##
+
+    supply_ship:
+        essentials:
+            name: 'Water supply from ships'
+            color: '#a7277e'
+            parent: supply_plus
+            carrier: water
+        constraints:
+            resource: file=ship_resource.csv:cap 
+            energy_eff: 1 
+            energy_cap_max: 4000
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                om_con: 11.67 # €/m3 cost of water as by contract from the Minister for the Sicilian Islands (Delibera n. 693 https://www.anticorruzione.it/-/rifornimento-acqua-potabile-alle-isole-della-sicilia-emerse-gravi-anomalie-e-criticit%C3%A0)
+            emissions:
+                interest_rate: 0.10
+                om_con: 3.8436  #kgCO2/m3  emission from transport via boat (kgCO2/m3)
+                
+##-THERMOELECTRIC-##
+            
+    thermo:
+        essentials:
+            name: 'Diesel generators'
+            color: '#3a3a47'  # grey
+            parent: supply
+            carrier_out: electricity
+        constraints:
+            resource: inf  # Coal
+            energy_eff: 0.3                   
+            energy_cap_max: 1000000000    #kW  Potenza installata
+            energy_ramping: 0.8
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                om_annual: 73     # Euro/kW/year - annual operation and maintanance cost
+                om_con: 0.08244    # Euro/kWh  -  considering a fuel cost of 807.9 €/m3 (2024 - without accise) and an energy content of 9800 kWh per cubic meter (m³).
+                energy_cap: 0    #€/kW       0 if we consider only generators already installed
+            emissions:
+                om_con: 0.34  # kgCO2/kWh before applying the efficiency   
+# thermo-end
+
+##-DESALTER-##
+
+#desalter-start
+    desalter_existing:  #represent an equivalent desalter used to convert electricity to water
+        essentials:
+            name: 'Desalination Plant - Existing'
+            color: '#4a7ae2'  # grey (to be changed)
+            parent: conversion
+            carrier_in: electricity
+            carrier_out: water
+        constraints:
+            energy_eff: 0.1333                    # carrier conversion efficiency:  7.5 kWh/m3
+            energy_cap_equals: 70               # m3/h installed (calculated for producing the nominal capacity of 70 m3/h)
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                om_annual: 175.2 #€/kW*anno
+                energy_cap: 0 #€/kW
+            emissions:
+                om_con: 0  # kgCO2/kWh CO2 emissions for diesel
+
+    desalter_planned:  #represent an equivalent desalter used to convert electricity to water
+        essentials:
+            name: 'Desalination Plant - New'
+            color: '#4a1ad5'  # grey (to be changed)
+            parent: conversion
+            carrier_in: electricity
+            carrier_out: water
+        constraints:
+            energy_eff: 0.1647                    # carrier conversion efficiency 6 kWh/m3
+            energy_cap_max: 144                    # m3/h installed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                om_annual: 175.2 #€/kW*anno
+                energy_cap: 39503.8343 #€/(m3*h)   #Considering a cost of 5,688,552.14 € for a capacity of 144 m3/h (scheda tecnica) 
+            emissions:
+                om_con: 0  # kgCO2/kWh CO2 emissions for diesel
+#desalter-end
+
+##-RENEWABLES-##
+
+# pv-start
+    pv_existing_roof:
+        essentials:
+            name: 'Roof PV - Existing'
+            color: '#dde24a'            # yellow
+            parent: supply_plus
+            carrier: electricity
+        constraints:
+            resource: file=pv_resource.csv:prd  # Already accounts for panel efficiency - per_area - per_cap
+            resource_unit: energy_per_cap  # energy_per_cap = kWh/kW; energy_per_area kWh/m2
+            energy_cap_equals: 26.93 # kW to be used if the tech is already installed
+            force_resource: false  # if false, curtailment is allowed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                om_annual: 17
+            emissions:
+                om_prod: 0 # kgCO2/kWh
+                
+    pv_existing_ground:
+        essentials:
+            name: 'Ground PV'
+            color: '#b2e24a'            # yellow
+            parent: supply_plus
+            carrier: electricity
+        constraints:
+            resource: file=pv_resource.csv:prd  # Already accounts for panel efficiency - per_area - per_cap
+            resource_unit: energy_per_cap  # energy_per_cap = kWh/kW; energy_per_area kWh/m2
+            energy_cap_equals: 118.14  # kW to be used if the capacity will be optimized
+            force_resource: false  # if false, curtailment is allowed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0  # euro/kW  Source: IRENA 2019 media residenziale e commerciale per l'Italia
+                om_annual: 17
+            emissions:
+                om_prod: 0 # kgCO2/kWh
+                
+    pv_planned_roof:
+        essentials:
+            name: 'Roof PV - New'
+            color: '#fff700'            # yellow
+            parent: supply_plus
+            carrier: electricity
+        constraints:
+            resource: file=pv_resource.csv:prd  # Already accounts for panel efficiency - per_area - per_cap
+            resource_unit: energy_per_cap  # energy_per_cap = kWh/kW; energy_per_area kWh/m2
+            resource_area_max: 9637.35 # m2 available area for installing PV (aree urbane e coeff sfruttamento 2%)
+            force_resource: false  # if false, curtailment is allowed
+            resource_area_per_energy_cap: 5 # m2 of area are needed to install 1 kWp of panels
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 1257  # euro/kW  Source: IRENA 2019 media residenziale e commerciale per l'Italia
+                om_annual: 17
+            emissions:
+                om_prod: 0 # kgCO2/kWh
+
+#pv-end
+
+##-STORAGE-##
+
+# battery-start
+    battery:
+        essentials:
+            name: 'Electricity storage'
+            color: '#f000ff'  # colore  56c7e6
+            parent: storage
+            carrier: electricity
+        constraints:
+            energy_cap_max: 10000000000 #kW
+            energy_eff: 0.85
+            storage_cap_max: 10000000000 #kWh
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0 # euro per kW
+                storage_cap: 800   # euro per kWh   costo installazione
+                om_annual: 10  # €/kWh/anno
+            emissions:
+                om_prod: 0  # kgCO2/kWh
+# battery-end
+
+# water_storage-start
+    water_storage_existing:
+        essentials:
+            name: 'Water storage - Existing'
+            color: '#7ca86f'  # colore  56c7e6
+            parent: storage
+            carrier: water
+        constraints:
+            energy_cap_equals: 5000 
+            energy_eff:  1
+            storage_cap_equals: 10000 #(10,000 m3, as defined in page 5 of https://www.regione.sicilia.it/sites/default/files/2022-02/Verbale_22-12-2021_Lampedusa%28firmato%29_2.pdf)
+            lifetime: 25
+            storage_loss: 0
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0
+                storage_cap: 0 # €/m3 per water storage capacity
+                om_prod: 0  # €/m3 per year
+                
+    water_storage_planned:
+        essentials:
+            name: 'Water storage - Planned'
+            color: '#a8e497'  # colore  56c7e6
+            parent: storage
+            carrier: water
+        constraints:
+            energy_cap_max: 10000 
+            energy_eff: 1
+            storage_cap_max: 10000 #m3
+            lifetime: 25
+            storage_loss: 0
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0.001
+                storage_cap: 3200 # €/m3 per water storage capacity
+                om_prod: 0  # €/m3 per year
+            emissions:
+                om_prod: 0
+# water_storage-end
+
+##-DEMAND-##
+
+# demand-start
+    demand_electricity:
+        essentials:
+            name: 'Electricity demand'
+            color: '#565700'            # blue
+            parent: demand
+            carrier: electricity
+    
+    demand_water:
+        essentials:
+            name: 'Water demand'
+            color: '#050057'            # blue
+            parent: demand
+            carrier: water
+# demand-end
+
